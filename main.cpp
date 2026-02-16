@@ -19,6 +19,20 @@ void llenarTablero(vector <vector<string>> &Tablero,string nom_fich){
         fichero.close();
     }
 }
+
+bool puedoMover(vector<vector<string>>Tablero,int i, int j)
+    {
+        if(i+1>=6||i-1<0||j+1>=6||j-1<0)
+            return false;
+        return true;
+    }
+void Movimiento(vector<vector<string>> &Tablero)
+    {   int i,j;
+        if(puedoMover(Tablero,i,j))
+            {
+
+            }
+    }
 void posicionX(int &x,int &y,vector <vector<string>> Tablero){
     for(int i=0;i<6;i++)
         {
@@ -33,6 +47,7 @@ void posicionX(int &x,int &y,vector <vector<string>> Tablero){
                 }
         }
 }
+
 void posicionZ(int &Zx,int &Zy, vector<vector<string>> Tablero)
     {
         for(int i=0;i<6;i++)
