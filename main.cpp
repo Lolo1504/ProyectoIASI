@@ -19,6 +19,38 @@ void llenarTablero(vector <vector<string>> &Tablero,string nom_fich){
         fichero.close();
     }
 }
+void posicionX(int &x,int &y,vector <vector<string>> Tablero){
+    for(int i=0;i<6;i++)
+        {
+            for(int j=0;j<6;j++)
+                {
+                    if(Tablero[i][j]=="X")
+                        {
+                            x=i;
+                            y=j;
+                            return;
+                        }
+                }
+        }
+}
+void posicionZ(int &Zx,int &Zy, vector<vector<string>> Tablero)
+    {
+        for(int i=0;i<6;i++)
+            {
+                for(int j=0;j<6;j++)
+                    {
+                        if(Tablero[i][j]=="Z")
+                        {
+                            Zx=i;
+                            Zy=j;
+                            return;
+                        }
+                    }
+            }
+
+    }
+
+
 void impresionTablero(vector <vector<string>> Tablero){
     for(int i =0;i<6;i++) {
         for(int j=0;j<6;j++) {
@@ -29,7 +61,7 @@ void impresionTablero(vector <vector<string>> Tablero){
 int main () 
 {
     cout << "Seleccione fichero del 1-4" << endl;
-    string nom_fich = "";
+    string nom_fich;
     int ind = 0;
 
     cin >> ind;
