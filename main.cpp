@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 using namespace std;
+
 void llenarTablero(vector <vector<string>> &Tablero,string nom_fich){
  ifstream fichero;
     string caracter;
@@ -26,102 +27,80 @@ void impresionTablero(vector <vector<string>> Tablero){
             cout<< Tablero[i][j];
         }
     }
-cout<< endl << endl;
-}
-void posicionX(int &x,int &y,vector <vector<string>> Tablero){
-    for(int i=0;i<6;i++)
-        {
-            for(int j=0;j<6;j++)
-                {
-                    if(Tablero[i][j]=="X")
-                        {
-                            x=i;
-                            y=j;
-                            return;
-                        }
-                }
-        }
+	cout<< endl << endl;
 }
 
-void posicionZ(int &Zx,int &Zy, vector<vector<string>> Tablero)
-    {
-        for(int i=0;i<6;i++)
-            {
-                for(int j=0;j<6;j++)
-                    {
-                        if(Tablero[i][j]=="Z")
-                        {
-                            Zx=i;
-                            Zy=j;
-                            return;
-                        }
-                    }
+
+void posicionX(int &x, int &y, const vector<vector<string>>& Tablero) {
+    bool encontrado = false;
+    
+    for(int i = 0; i < 6 && !encontrado; i++) {
+        for(int j = 0; j < 6 && !encontrado; j++) {
+            if(Tablero[i][j] == "X") {
+                x = i;
+                y = j;
+                encontrado = true;
             }
-
+        }
     }
-void intercambiar(int nX,int nY,string letra,vector<vector<string>> &Tablero)
-    {
+}
+	
+
+void intercambiar(int nX,int nY,string letra,vector<vector<string>> &Tablero) {
         int x,y;
         posicionX(x,y,Tablero);
         Tablero[x][y]=letra;
         Tablero[nX][nY]="X";
+}
+	
+int MovimientoAbajo(const vector<vector<string>>& Tablero, int fila, int columna, string letra) { 
+    if(fila + 1 < 6 && Tablero[fila + 1][columna] == letra) { 
+        return MovimientoAbajo(Tablero, fila + 1, columna, letra);
+    } else {
+        return fila;
     }
-int MovimientoAbajo(vector<vector<string>> Tablero,int x,int y,string letra)
-    {
-        
-        if(x+1<6&&Tablero[x+1][y]==letra)
-            { 
-                return  MovimientoAbajo(Tablero,x+1,y,letra);
-            }
-        else
-            return x;
+}
+	
+int MovimientoArriba(const vector<vector<string>>& Tablero, int fila, int columna, string letra) {
+    if(fila - 1 >= 0 && Tablero[fila - 1][columna] == letra) { 
+        return MovimientoArriba(Tablero, fila - 1, columna, letra);
+    } else {
+        return fila;
     }
-int MovimientoArriba(vector<vector<string>> Tablero,int x,int y,string letra)
-    {
-        
-        if(x-1>0&&Tablero[x-1][y]==letra)
-            { 
-                return  MovimientoArriba(Tablero,x-1,y,letra);
-            }
-        else
-            return x;
+}
+	
+int MovimientoIzq(const vector<vector<string>>& Tablero, int fila, int columna, string letra) {
+    if(columna - 1 >= 0 && Tablero[fila][columna - 1] == letra) { 
+        return MovimientoIzq(Tablero, fila, columna - 1, letra);
+    } else {
+        return columna;
     }
-int MovimientoIzq(vector<vector<string>> Tablero,int x,int y,string letra)
-    {
-        if(y-1>0&&Tablero[x][y-1]==letra)
-            { 
-                return  MovimientoIzq(Tablero,x,y-1,letra);
-            }
-        else
-            return y;
+}
+	
+int MovimientoDer(const vector<vector<string>>& Tablero, int fila, int columna, string letra) {
+    if(columna + 1 < 6 && Tablero[fila][columna + 1] == letra) { 
+        return MovimientoDer(Tablero, fila, columna + 1, letra);
+    } else {
+        return columna;
     }
-    int MovimientoDer(vector<vector<string>> Tablero,int x,int y,string letra)
-    {
-        if(y+1<6&&Tablero[x][y+1]==letra)
-            { 
-                return  MovimientoDer(Tablero,x,y+1,letra);
-            }
-        else
-            return y;
+}
+
+bool CandidatoX(const vector<vector<string>>& Tablero, int x, int y, string letra) {
+	bool vertical = true;
+    if ((y - 1 >= 0 && Tablero[x][y - 1] == letra) || (y + 1 < 6 && Tablero[x][y + 1] == letra)) {
+         vertical = false;
+    } 
+    return vertical;
+}
+	
+bool CandidatoY(const vector<vector<string>>& Tablero, int x, int y, string letra) {
+    bool horizontal = true;
+    if ((x - 1 >= 0 && Tablero[x - 1][y] == letra) || (x + 1 < 6 && Tablero[x + 1][y] == letra)) {
+        horizontal = false;
     }
-bool CandidatoX(vector<vector<string>> Tablero,int x,int y,string letra)
-    {
-        if(y-1>0 && Tablero[x][y-1]!=letra)
-        {
-            if(y+1<6 && Tablero[x][y+1]!=letra)
-                return true;
-        }
-        return false;
-    }
-    bool CandidatoY(vector<vector<string>> Tablero,int x,int y,string letra)
-    {
-        if(x-1>0 && Tablero[x-1][y]!=letra)
-        {
-            if(x+1<6 && Tablero[x+1][y]!=letra)
-                return true;
-        }
-        return false;
-    }
+    return horizontal;
+}
+	
 void Movimiento(vector<vector<string>> &Tablero)
     {   
         int x,y;
