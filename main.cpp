@@ -101,62 +101,52 @@ bool CandidatoY(const vector<vector<string>>& Tablero, int x, int y, string letr
     return horizontal;
 }
 	
-void Movimiento(vector<vector<string>> &Tablero)
-    {   
-        int x,y;
-        string letra;
-        posicionX(x,y,Tablero);
-        if(x+1<6)
-            {
-           
-                letra=Tablero[x+1][y];
-              if(CandidatoX(Tablero,x+1,y,letra))
-              {
-                cout<<"movimiento del coche "<<letra<<endl;
-                intercambiar(MovimientoAbajo(Tablero,x+1,y,letra),y,letra,Tablero);
-                impresionTablero(Tablero);
-                posicionX(x,y,Tablero);
-                return;
-              }
+void Movimiento(vector<vector<string>> Tablero)
+{   
+    int x, y;
+    string letra;
+    posicionX(x, y, Tablero);
+
+    if(x + 1 < 6) {
+        letra = Tablero[x + 1][y];
+        if(CandidatoX(Tablero, x + 1, y, letra)) {
+            vector<vector<string>> Tablero_Copia = Tablero; 
+            cout << "Movimiento:  " << letra << endl;
+            intercambiar(MovimientoAbajo(Tablero_Copia, x + 1, y, letra), y, letra, Tablero_Copia);
+            impresionTablero(Tablero_Copia);
         }
-        if(x-1>0)
-            {
-                letra=Tablero[x-1][y];
-              if(CandidatoX(Tablero,x-1,y,letra))
-              {
-                cout<<"movimiento del coche "<<letra<<endl;
-                intercambiar(MovimientoArriba(Tablero,x-1,y,letra),y,letra,Tablero);
-                impresionTablero(Tablero);
-                posicionX(x,y,Tablero);
-                return;
-              }   
-            }
-          if(y-1>0)
-            {
-                letra=Tablero[x][y-1];
-              if(CandidatoY(Tablero,x,y-1,letra))
-              {
-                cout<<"movimiento del coche "<<letra<<endl;
-                intercambiar(x,MovimientoIzq(Tablero,x,y-1,letra),letra,Tablero);
-                impresionTablero(Tablero);
-                posicionX(x,y,Tablero);
-                return;
-              }   
-            }
-        if(y+1<6)
-            {
-                  letra=Tablero[x][y+1];
-              if(CandidatoY(Tablero,x,y+1,letra))
-              {
-                cout<<"movimiento del coche "<<letra<<endl;
-                intercambiar(x,MovimientoDer(Tablero,x,y+1,letra),letra,Tablero);
-                impresionTablero(Tablero);
-                posicionX(x,y,Tablero);
-                return;
-              }   
-            }
     }
 
+    if(x - 1 >= 0) {
+        letra = Tablero[x - 1][y];
+        if(CandidatoX(Tablero, x - 1, y, letra)) {
+            vector<vector<string>> Tablero_Copia = Tablero; 
+            cout << "Movimiento : " << letra << endl;
+            intercambiar(MovimientoArriba(Tablero_Copia, x - 1, y, letra), y, letra, Tablero_Copia);
+            impresionTablero(Tablero_Copia);
+        }   
+    }
+
+    if(y - 1 >= 0) {
+        letra = Tablero[x][y - 1];
+        if(CandidatoY(Tablero, x, y - 1, letra)) {
+            vector<vector<string>> Tablero_Copia = Tablero; 
+            cout << "Movimiento: " << letra << endl;
+            intercambiar(x, MovimientoIzq(Tablero_Copia, x, y - 1, letra), letra, Tablero_Copia);
+            impresionTablero(Tablero_Copia);
+        }   
+    }
+
+    if(y + 1 < 6) {
+        letra = Tablero[x][y + 1];
+        if(CandidatoY(Tablero, x, y + 1, letra)) {
+            vector<vector<string>> Tablero_Copia = Tablero; 
+            cout << "Movimiento: " << letra << endl;
+            intercambiar(x, MovimientoDer(Tablero_Copia, x, y + 1, letra), letra, Tablero_Copia);
+            impresionTablero(Tablero_Copia);
+        }   
+    }
+}
 int main () 
 {
     cout << "Seleccione fichero del 1-4" << endl;
