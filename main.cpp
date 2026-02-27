@@ -7,9 +7,9 @@
 
 using namespace std;
 
-// ------------------------------------------------------------
-// Funciones de lectura y manipulación del tablero (intactas)
-// ------------------------------------------------------------
+// --------------------------------------------------------
+// Funciones de lectura y manipulación del tablero
+// --------------------------------------------------------
 
 void llenarTablero(vector<vector<string>> &Tablero, string nom_fich) {
     ifstream fichero;
@@ -155,9 +155,9 @@ int heuristic(const vector<vector<string>> &Tablero) {
     return distanciaZBorde + distanciaZX;
 }
 
-// ------------------------------------------------------------
+// ----------------------------------------------------
 // Escalada de Máxima Pendiente
-// ------------------------------------------------------------
+// ----------------------------------------------------
 
 void escaladaMaximaPendiente(vector<vector<string>> Tablero) {
     cout << "\n=== INICIANDO ESCALADA DE MAXIMA PENDIENTE ===" << endl;
@@ -228,10 +228,9 @@ void escaladaMaximaPendiente(vector<vector<string>> Tablero) {
             }
         }
 
-        // Vemos si es mejor el hijo  que el padre
         if (best_h < current_h) {
             cout << "-> Se mueve vehiculo: " << best_letra << " | Nueva heuristica: " << best_h << endl;
-            Tablero = best_board; // Actualizamos el estado actual
+            Tablero = best_board; // Actualizamos
             current_h = best_h;
             impresionTablero(Tablero);
             iteracion++;
@@ -269,8 +268,6 @@ int main() {
 
     cout << "Tablero inicial:" << endl;
     impresionTablero(Tablero);
-
-    // Lanzamos el algoritmo
     escaladaMaximaPendiente(Tablero);
 
     return 0;
