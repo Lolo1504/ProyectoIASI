@@ -7,9 +7,9 @@
 
 using namespace std;
 
-// --------------------------------------------------------
-// Funciones de lectura y manipulación del tablero
-// --------------------------------------------------------
+// ------------------------------------------------------------
+// Funciones de lectura y manipulación del tablero (intactas)
+// ------------------------------------------------------------
 
 void llenarTablero(vector<vector<string>> &Tablero, string nom_fich) {
     ifstream fichero;
@@ -155,90 +155,83 @@ int heuristic(const vector<vector<string>> &Tablero) {
     return distanciaZBorde + distanciaZX;
 }
 
-// ----------------------------------------------------
+// ------------------------------------------------------------
 // Escalada de Máxima Pendiente
-// ----------------------------------------------------
+// ------------------------------------------------------------
 
-void escaladaMaximaPendiente(vector<vector<string>> Tablero) {
-    cout << "\n=== INICIANDO ESCALADA DE MAXIMA PENDIENTE ===" << endl;
-    
+void escaladaMaximaPendiente(const vector<vector<string>> &Tablero) {
     int current_h = heuristic(Tablero);
-    int iteracion = 1;
-    bool atascado = false;
+    cout << "Heuristica del estado inicial: " << current_h << endl;
+    cout << "Movimientos posibles desde el estado inicial:" << endl;
 
-    while (!atascado) {
-        cout << "\n--- Iteracion " << iteracion << " ---" << endl;
-        cout << "Heuristica actual: " << current_h << endl;
+    int x, y;
+    posicionX(x, y, Tablero);
+    string letra;
 
-		if (current_h == 0) {
-		            cout << "\n-> El coche Z ha llegado al borde." << endl;
-		            break;
-		        }
-				
-        int x, y;
-        posicionX(x, y, Tablero);
-        string letra;
+    int best_h = INT_MAX;
+    string best_letra = "";
 
-        int best_h = INT_MAX;
-        vector<vector<string>> best_board;
-        string best_letra = "";
+    // Abajo
+    if (x + 1 < 6) {
+        letra = Tablero[x + 1][y];
+        if (CandidatoX(Tablero, x + 1, y, letra)) {
+            vector<vector<string>> copia = Tablero;
+            int nuevaFila = MovimientoAbajo(copia, x + 1, y, letra);
+            intercambiar(nuevaFila, y, letra, copia);
+            int h = heuristic(copia);
+            cout << "Vehículo: " << letra << " -> Heurística: " << h << endl;
+            impresionTablero(copia);
+            if (h < best_h) { best_h = h; best_letra = letra; }
+        }
+    }
 
-        // Abajo
-        if (x + 1 < 6) {
-            letra = Tablero[x + 1][y];
-            if (CandidatoX(Tablero, x + 1, y, letra)) {
-                vector<vector<string>> copia = Tablero;
-                int nuevaFila = MovimientoAbajo(copia, x + 1, y, letra);
-                intercambiar(nuevaFila, y, letra, copia);
-                int h = heuristic(copia);
-                if (h < best_h) { best_h = h; best_board = copia; best_letra = letra; }
-            }
+    // Arriba
+    if (x - 1 >= 0) {
+        letra = Tablero[x - 1][y];
+        if (CandidatoX(Tablero, x - 1, y, letra)) {
+            vector<vector<string>> copia = Tablero;
+            int nuevaFila = MovimientoArriba(copia, x - 1, y, letra);
+            intercambiar(nuevaFila, y, letra, copia);
+            int h = heuristic(copia);
+            cout << "Vehículo: " << letra << " -> Heurística: " << h << endl;
+            impresionTablero(copia);
+            if (h < best_h) { best_h = h; best_letra = letra; }
         }
-        // Arriba
-        if (x - 1 >= 0) {
-            letra = Tablero[x - 1][y];
-            if (CandidatoX(Tablero, x - 1, y, letra)) {
-                vector<vector<string>> copia = Tablero;
-                int nuevaFila = MovimientoArriba(copia, x - 1, y, letra);
-                intercambiar(nuevaFila, y, letra, copia);
-                int h = heuristic(copia);
-                if (h < best_h) { best_h = h; best_board = copia; best_letra = letra; }
-            }
-        }
-        // Izquierda
-        if (y - 1 >= 0) {
-            letra = Tablero[x][y - 1];
-            if (CandidatoY(Tablero, x, y - 1, letra)) {
-                vector<vector<string>> copia = Tablero;
-                int nuevaCol = MovimientoIzq(copia, x, y - 1, letra);
-                intercambiar(x, nuevaCol, letra, copia);
-                int h = heuristic(copia);
-                if (h < best_h) { best_h = h; best_board = copia; best_letra = letra; }
-            }
-        }
-        // Derecha
-        if (y + 1 < 6) {
-            letra = Tablero[x][y + 1];
-            if (CandidatoY(Tablero, x, y + 1, letra)) {
-                vector<vector<string>> copia = Tablero;
-                int nuevaCol = MovimientoDer(copia, x, y + 1, letra);
-                intercambiar(x, nuevaCol, letra, copia);
-                int h = heuristic(copia);
-                if (h < best_h) { best_h = h; best_board = copia; best_letra = letra; }
-            }
-        }
+    }
 
-        if (best_h < current_h) {
-            cout << "-> Se mueve vehiculo: " << best_letra << " | Nueva heuristica: " << best_h << endl;
-            Tablero = best_board; // Actualizamos
-            current_h = best_h;
-            impresionTablero(Tablero);
-            iteracion++;
-        } else {
-            cout << "\n-> [Maximo Local / Meseta]" << endl;
-            cout << "-> Ningun movimiento posible mejora la heuristica actual (" << current_h << ")." << endl;
-            atascado = true;
+    // Izquierda
+    if (y - 1 >= 0) {
+        letra = Tablero[x][y - 1];
+        if (CandidatoY(Tablero, x, y - 1, letra)) {
+            vector<vector<string>> copia = Tablero;
+            int nuevaCol = MovimientoIzq(copia, x, y - 1, letra);
+            intercambiar(x, nuevaCol, letra, copia);
+            int h = heuristic(copia);
+            cout << "Vehículo: " << letra << " -> Heurística: " << h << endl;
+            impresionTablero(copia);
+            if (h < best_h) { best_h = h; best_letra = letra; }
         }
+    }
+
+    // Derecha
+    if (y + 1 < 6) {
+        letra = Tablero[x][y + 1];
+        if (CandidatoY(Tablero, x, y + 1, letra)) {
+            vector<vector<string>> copia = Tablero;
+            int nuevaCol = MovimientoDer(copia, x, y + 1, letra);
+            intercambiar(x, nuevaCol, letra, copia);
+            int h = heuristic(copia);
+            cout << "Vehículo: " << letra << " -> Heurística: " << h << endl;
+            impresionTablero(copia);
+            if (h < best_h) { best_h = h; best_letra = letra; }
+        }
+    }
+
+    // Indicamos el mejor movimiento
+    if (best_letra != "") {
+        cout << "=> El MEJOR movimiento evaluado es: " << best_letra << " (con heuristica " << best_h << ")" << endl;
+    } else {
+        cout << "=> No hay movimientos posibles." << endl;
     }
 }
 
@@ -268,6 +261,8 @@ int main() {
 
     cout << "Tablero inicial:" << endl;
     impresionTablero(Tablero);
+
+    // Lanzamos el algoritmo
     escaladaMaximaPendiente(Tablero);
 
     return 0;
