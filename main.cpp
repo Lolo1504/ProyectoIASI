@@ -111,7 +111,25 @@ bool CandidatoY(const vector<vector<string>> &Tablero, int x, int y, string letr
 // ------------------------------------------------------------
 // HEURÍSTICA
 // ------------------------------------------------------------
+
+bool esObjetivo(const vector<vector<string>> &Tablero) {
+    for (int i = 0; i < 6; i++) {
+        for (int j = 0; j < 6; j++) {
+            if (Tablero[i][j] == "Z") {
+                if (i == 0 || i == 5 || j == 0 || j == 5) {
+                    return true;
+                }
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
 int heuristic(const vector<vector<string>> &Tablero) {
+	if (esObjetivo(Tablero)) {
+	        return 0; // ¡Victoria! Heurística mínima.
+	    }
     int zX = -1, zY = -1;
     int xX = -1, xY = -1;
     
@@ -140,6 +158,7 @@ int heuristic(const vector<vector<string>> &Tablero) {
 // ------------------------------------------------------------
 // Escalada de Máxima Pendiente
 // ------------------------------------------------------------
+
 void escaladaMaximaPendiente(vector<vector<string>> Tablero) {
     cout << "\n=== INICIANDO ESCALADA DE MAXIMA PENDIENTE ===" << endl;
     
@@ -151,6 +170,11 @@ void escaladaMaximaPendiente(vector<vector<string>> Tablero) {
         cout << "\n--- Iteracion " << iteracion << " ---" << endl;
         cout << "Heuristica actual: " << current_h << endl;
 
+		if (current_h == 0) {
+		            cout << "\n-> El coche Z ha llegado al borde." << endl;
+		            break;
+		        }
+				
         int x, y;
         posicionX(x, y, Tablero);
         string letra;
