@@ -68,6 +68,7 @@ int main() {
             if (exito) {
                 cout << "\n¡Solución encontrada por escalada!" << endl;
                 cout << "Secuencia de movimientos: ";
+                if(secuencia.empty()) cout<<"Z esta en un borde";
                 for (size_t i = 0; i < secuencia.size(); i++) {
                     if (i > 0) cout << ", ";
                     cout << secuencia[i];
@@ -97,6 +98,7 @@ int main() {
             if (exito) {
                 cout << "\n¡Solución encontrada por A*!" << endl;
                 cout << "Secuencia de movimientos: ";
+                if(secuencia.empty()) cout<<"Z esta en un borde";
                 for (size_t i = 0; i < secuencia.size(); i++) {
                     if (i > 0) cout << ", ";
                     cout << secuencia[i];
@@ -118,6 +120,7 @@ int main() {
             if (exito) {
                 cout << "\n¡Solución encontrada por Primero Mejor!" << endl;
                 cout << "Secuencia de movimientos: ";
+                if(secuencia.empty()) cout<<"Z esta en un borde";
                 for (size_t i = 0; i < secuencia.size(); i++) {
                     if (i > 0) cout << ", ";
                     cout << secuencia[i];
