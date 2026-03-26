@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <filesystem>  // Requiere C++17 para manejo del sistema de archivos
+#include <filesystem> 
 #include <regex>
 #include <fstream>
 
